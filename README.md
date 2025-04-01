@@ -31,12 +31,12 @@ This is a News Application built using Jetpack Compose, Room, and other modern A
 
 ### 📱 Screenshots
 
-| Home Screen                                      | Detail Screen                                               |
-|--------------------------------------------------|-------------------------------------------------------------|
-| <img src="screenshots/bookmark.png" width="200"> | <img src="screenshots/detail.png" width="200"> |
+| Home Screen                                        | Detail Screen                                               |
+|----------------------------------------------------|-------------------------------------------------------------|
+| <img src="screenshots/homescreen.png" width="200"> | <img src="screenshots/detail.png" width="200"> |
 
 
-| Search Screen                                | Bookmark Screen                                  |
-|----------------------------------------------|--------------------------------------------------|
-| <img src="screenshots/bookmark" width="200"> | <img src="screenshots/bookmark.png" width="200"> |
+| Search Screen                                  | Bookmark Screen                                  |
+|------------------------------------------------|--------------------------------------------------|
+| <img src="screenshots/search.png" width="200"> | <img src="screenshots/bookmark.png" width="200"> |
 
