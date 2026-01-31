@@ -1,38 +1,31 @@
 package com.bvn.newsapp.presentation.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
 import com.bvn.newsapp.R
 import com.bvn.newsapp.domain.model.Article
+import com.bvn.newsapp.presentation.Dimens.ExtraSmallPadding2
 import com.bvn.newsapp.presentation.Dimens.MediumPadding1
 import com.bvn.newsapp.presentation.common.ArticlesList
 import com.bvn.newsapp.presentation.common.SearchBar
-import com.bvn.newsapp.presentation.navgraph.Route
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -73,7 +66,7 @@ fun HomeScreen(
             onClick = {},
             modifier = Modifier.padding(horizontal = MediumPadding1)
         )
-        Spacer(modifier = Modifier.height(MediumPadding1))
+        Spacer(modifier = Modifier.height(ExtraSmallPadding2))
         Text(
             text = titles, modifier = Modifier
                 .fillMaxWidth()
