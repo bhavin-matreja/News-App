@@ -7,7 +7,7 @@ import com.bvn.newsapp.data.local.NewsDatabase
 import com.bvn.newsapp.data.local.NewsTypeConverter
 import com.bvn.newsapp.data.manager.LocalUserManagerImpl
 import com.bvn.newsapp.data.remote.NewsApi
-import com.bvn.newsapp.data.remote.repository.NewsRepositoryImpl
+import com.bvn.newsapp.data.repository.NewsRepositoryImpl
 import com.bvn.newsapp.domain.manager.LocalUserManager
 import com.bvn.newsapp.domain.repository.NewsRepository
 import com.bvn.newsapp.domain.usecases.app_entry.AppEntryUseCases
