@@ -1,15 +1,14 @@
 package com.bvn.newsapp.domain.repository
 
 import androidx.paging.PagingData
-import com.bvn.newsapp.domain.model.Article
+import com.bvn.newsapp.domain.model.NewsArticle
 import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
-    fun getNews(sources: List<String>): Flow<PagingData<Article>>
-    fun searchNews(searchQuery: String, sources: List<String>): Flow<PagingData<Article>>
-    suspend fun upsertArticle(article: Article)
-    suspend fun deleteArticle(article: Article)
-    fun getAllArticles():Flow<List<Article>>
-    suspend fun getArticle(url: String): Article?
-
+    fun getTopHeadlines(sources: List<String>): Flow<PagingData<NewsArticle>>
+    fun searchNews(searchQuery:String, sources: List<String>): Flow<PagingData<NewsArticle>>
+    suspend fun getArticle(url:String): NewsArticle?
+    fun getAllArticles():Flow<List<NewsArticle>>
+    suspend fun upsertArticle(article: NewsArticle)
+    suspend fun deleteArticle(article: NewsArticle)
 }
