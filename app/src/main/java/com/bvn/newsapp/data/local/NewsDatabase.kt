@@ -3,14 +3,11 @@ package com.bvn.newsapp.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.bvn.newsapp.data.local.NewsDao
-import com.bvn.newsapp.data.local.NewsTypeConverter
-import com.bvn.newsapp.domain.model.Article
+import com.bvn.booksappcompose.data.local.entity.NewsArticleEntity
 
-@Database(entities = [Article::class], version = 2)
+@Database(entities = [NewsArticleEntity::class], version = 1)
 @TypeConverters(NewsTypeConverter::class)
-abstract class NewsDatabase : RoomDatabase() {
+abstract class NewsDatabase: RoomDatabase() {
 
     abstract val newsDao: NewsDao
-
 }
