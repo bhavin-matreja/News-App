@@ -1,13 +1,13 @@
 package com.bvn.newsapp.presentation.details
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bvn.newsapp.domain.model.Article
+import com.bvn.newsapp.domain.model.NewsArticle
 import com.bvn.newsapp.domain.usecases.news.NewsUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,18 +16,18 @@ class DetailsViewModel @Inject constructor(
     private val newsUseCases: NewsUseCases
 ) : ViewModel() {
 
-    var sideEffect by mutableStateOf<String?>(null)
+    private var _sideEffect = Channel<String>()
+    val sideEffect = _sideEffect.receiveAsFlow()
+
+    private var job: Job? = null
 
     fun onEvent(event: DetailsEvent) {
         when (event) {
-            DetailsEvent.onBackClicked -> {}
-            DetailsEvent.onBookmarkClicked -> {}
-            DetailsEvent.onBrowsingClick -> {}
-            DetailsEvent.removeSideEffect -> {
-                sideEffect = null
-            }
-            is DetailsEvent.upsertDeleteArticle -> {
-                viewModelScope.launch {
+            DetailsEvent.OnBackClicked -> TODO()
+            DetailsEvent.onBrowsingClicked -> TODO()
+            is DetailsEvent.UpsertDeleteArticle -> {
+                job?.cancel()
+                job = viewModelScope.launch {
                     val article = newsUseCases.getArticleUseCase(event.article.url)
                     if (article == null) {
                         upsertArticle(event.article)
@@ -39,13 +39,13 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun deleteArticle(article: Article) {
+    private suspend fun deleteArticle(article: NewsArticle) {
         newsUseCases.deleteArticleUseCase(article)
-        sideEffect = "Article Deleted"
+        _sideEffect.send("Article Removed")
     }
 
-    private suspend fun upsertArticle(article: Article) {
+    private suspend fun upsertArticle(article: NewsArticle) {
         newsUseCases.upsertArticleUseCase(article)
-        sideEffect = "Article Saved"
+        _sideEffect.send("Article Saved")
     }
 }

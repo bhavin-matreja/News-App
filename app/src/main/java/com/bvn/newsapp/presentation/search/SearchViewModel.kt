@@ -1,13 +1,20 @@
 package com.bvn.newsapp.presentation.search
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.bvn.newsapp.domain.usecases.news.NewsUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,26 +22,33 @@ class SearchViewModel @Inject constructor(
     private val newsUseCases: NewsUseCases
 ) : ViewModel() {
 
-    var state by mutableStateOf(SearchState())
-        private set
+    private val _state = MutableStateFlow(SearchState())
+    var state = _state.asStateFlow()
+
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+    val articles = _state
+        .map { it.searchQuery }
+        .distinctUntilChanged()
+        .debounce(400)
+        .filter { it.isNotBlank() }
+        .flatMapLatest { query ->
+            newsUseCases.searchNewsUseCase(
+                searchQuery = query,
+                sources = listOf("bbc-news", "abc-news")
+            ).cachedIn(viewModelScope)
+        }
 
     fun onEvent(event: SearchEvent) {
         when (event) {
-            is SearchEvent.UpdateSearchQuery -> {
-                state = state.copy(searchQuery = event.searchQuery)
+            SearchEvent.SearchNews -> {
+                // not required now
+                //searchNews()
             }
-
-            SearchEvent.searchNews -> {
-                searchNews()
+            is SearchEvent.UpdateSearchQuery -> {
+                _state.update {
+                    it.copy(searchQuery = event.searchQuery)
+                }
             }
         }
-    }
-
-    private fun searchNews() {
-        val articles = newsUseCases.searchNewsUseCase(
-            searchQuery = state.searchQuery,
-            sources = listOf("bbc-news", "abc-news", "al-jazeera-english")
-        ).cachedIn(viewModelScope)
-        state = state.copy(articles = articles)
     }
 }

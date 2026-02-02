@@ -1,7 +1,7 @@
 package com.bvn.newsapp.presentation.bookmark
 
-import com.bvn.newsapp.domain.model.Article
+import com.bvn.newsapp.domain.model.NewsArticle
 
 data class BookmarkState(
-    val articles: List<Article> = emptyList()
+    val articles: List<NewsArticle> = emptyList()
 )

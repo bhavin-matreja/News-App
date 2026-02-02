@@ -6,10 +6,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,68 +27,80 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.bvn.newsapp.R
-import com.bvn.newsapp.domain.model.Article
-import com.bvn.newsapp.domain.model.Source
-import com.bvn.newsapp.presentation.Dimens.ArticleCardSize
-import com.bvn.newsapp.presentation.Dimens.ExtraSmallPadding
+import com.bvn.newsapp.domain.model.NewsArticle
+import com.bvn.newsapp.domain.model.NewsSource
+import com.bvn.newsapp.presentation.Dimens
 import com.bvn.newsapp.presentation.Dimens.ExtraSmallPadding2
-import com.bvn.newsapp.presentation.Dimens.SmallIconSize
-import com.bvn.newsapp.ui.theme.NewsAppTheme
 import com.bvn.newsapp.ui.theme.NewsAppTheme
 import com.bvn.newsapp.util.formatDate
 
 @Composable
 fun ArticleCard(
-    article: Article,
-    onClick: () -> Unit,
+    newsArticle: NewsArticle,
+    onClick: (NewsArticle) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-
-    Row(modifier = modifier.clickable { onClick() }) {
+    Row(modifier = modifier.clickable {
+        onClick(newsArticle)
+    }) {
         AsyncImage(
             model = ImageRequest.Builder(context)
-                .data(article.urlToImage)
+                .data(newsArticle.urlToImage)
+                .crossfade(true)
                 .build(),
             contentDescription = null,
+            placeholder = painterResource(R.drawable.ic_launcher_background),
+            contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(ArticleCardSize)
-                .clip(MaterialTheme.shapes.medium),
-            contentScale = ContentScale.Crop
+                .clip(RoundedCornerShape(4.dp))
+                .size(Dimens.ArticleCardSize),
+            error = painterResource(R.drawable.ic_network_error)
         )
         Column(
-            verticalArrangement = Arrangement.SpaceAround,
+            verticalArrangement = Arrangement.SpaceAround, // Evenly spaces title and metadata
             modifier = Modifier
-                .padding(horizontal = ExtraSmallPadding)
-                .height(ArticleCardSize)
+                .padding(start = Dimens.ExtraSmallPadding)
+                .fillMaxHeight()
+                .height(Dimens.ArticleCardSize) // Match the image height for vertical alignment
+                .weight(1f),
         ) {
             Text(
-                text = article.title,
-                style = MaterialTheme.typography.bodyMedium,
-                color = colorResource(id = R.color.text_title),
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+                text = newsArticle.title,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2
             )
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Spacer(modifier = Modifier.weight(1f))
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(
-                    text = article.source.name,
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = colorResource(id = R.color.body),
+                    text = newsArticle.source.name,
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = Modifier.width(ExtraSmallPadding2))
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_time),
+                    painter = painterResource(id = R.drawable.ic_time), // Use a time icon
                     contentDescription = null,
-                    modifier = Modifier.size(SmallIconSize),
-                    tint = colorResource(id = R.color.body)
+                    modifier = Modifier.size(Dimens.SmallIconSize),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.width(ExtraSmallPadding2))
                 Text(
-                    text = article.publishedAt.formatDate(),
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                    text = newsArticle.publishedAt.formatDate(),
+                    style = MaterialTheme.typography.bodySmall,
                     color = colorResource(id = R.color.body),
                 )
             }
@@ -98,12 +113,12 @@ fun ArticleCard(
 @Composable
 fun PreviewArticleCard() {
     NewsAppTheme {
-        ArticleCard(article = Article(
+        ArticleCard(newsArticle = NewsArticle(
             "author",
             "content",
             "desc",
             "2025-03-31T13:06:00Z",
-            Source("id", "name"),
+            NewsSource("id", "name"),
             "title",
             "url",
             "urlToImage",

@@ -13,20 +13,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import com.bvn.newsapp.R
-import com.bvn.newsapp.domain.model.Article
+import com.bvn.newsapp.domain.model.NewsArticle
 import com.bvn.newsapp.presentation.Dimens.MediumPadding1
 import com.bvn.newsapp.presentation.common.ArticlesList
-import com.bvn.newsapp.presentation.navgraph.Route
 
 @Composable
 fun BookmarkScreen(
     state: BookmarkState,
-    navigateToDetails: (Article) -> Unit
+    navigateToDetails: (NewsArticle) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
             .padding(top = MediumPadding1, end = MediumPadding1, start = MediumPadding1)
     ) {
         Text(

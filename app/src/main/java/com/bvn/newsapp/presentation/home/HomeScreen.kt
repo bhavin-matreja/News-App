@@ -21,18 +21,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
 import com.bvn.newsapp.R
-import com.bvn.newsapp.domain.model.Article
+import com.bvn.newsapp.domain.model.NewsArticle
 import com.bvn.newsapp.presentation.Dimens.ExtraSmallPadding2
 import com.bvn.newsapp.presentation.Dimens.MediumPadding1
-import com.bvn.newsapp.presentation.common.ArticlesList
+import com.bvn.newsapp.presentation.common.ArticleList
 import com.bvn.newsapp.presentation.common.SearchBar
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
-    articles: LazyPagingItems<Article>,
+    articles: LazyPagingItems<NewsArticle>,
     navigateToSearch: () -> Unit,
-    navigateToDetails: (Article) -> Unit,
+    navigateToDetails: (NewsArticle) -> Unit,
 ) {
     val titles by remember {
         derivedStateOf {
@@ -50,7 +50,6 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = MediumPadding1)
-            .statusBarsPadding()
     ) {
         Text(
             text = "News",
@@ -61,9 +60,9 @@ fun HomeScreen(
         SearchBar(
             text = "",
             readOnly = true,
-            onValueChange = {},
-            onSearch = navigateToSearch,
-            onClick = {},
+            onClick = navigateToSearch,
+            onValueChanged = {},
+            onSearch = {},
             modifier = Modifier.padding(horizontal = MediumPadding1)
         )
         Spacer(modifier = Modifier.height(ExtraSmallPadding2))
@@ -75,10 +74,10 @@ fun HomeScreen(
             fontSize = 12.sp,
             color = colorResource(id = R.color.placeholder)
         )
-        Spacer(modifier = Modifier.height(MediumPadding1))
-        ArticlesList(
+        Spacer(modifier = Modifier.height(8.dp))
+        ArticleList(
             articles = articles,
-            onClick = { navigateToDetails(it) },
+            onArticleClicked = { navigateToDetails(it) },
             modifier = Modifier.padding(horizontal = MediumPadding1)
         )
 

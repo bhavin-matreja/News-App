@@ -1,7 +1,6 @@
 package com.bvn.newsapp.presentation.details
 
 import android.content.Intent
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,8 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.bvn.newsapp.R
-import com.bvn.newsapp.domain.model.Article
-import com.bvn.newsapp.domain.model.Source
+import com.bvn.newsapp.domain.model.NewsArticle
+import com.bvn.newsapp.domain.model.NewsSource
 import com.bvn.newsapp.presentation.Dimens.ArticleImageHeight
 import com.bvn.newsapp.presentation.Dimens.MediumPadding1
 import com.bvn.newsapp.presentation.details.components.DetailsTopBar
@@ -32,7 +31,7 @@ import com.bvn.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun DetailsScreen(
-    article: Article,
+    article: NewsArticle,
     event: (DetailsEvent) -> Unit,
     navigateUp: () -> Unit
 ) {
@@ -62,7 +61,7 @@ fun DetailsScreen(
                 }
             },
             onBookmarkClick = {
-                event(DetailsEvent.upsertDeleteArticle(article))
+                event(DetailsEvent.UpsertDeleteArticle(article))
             },
             onBackClick = navigateUp
         )
@@ -101,18 +100,19 @@ fun DetailsScreen(
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun DetailsScreenPreview() {
-    NewsAppTheme(dynamicColor = false) {
+    NewsAppTheme (dynamicColor = false) {
         DetailsScreen(
-            article = Article(
+            article = NewsArticle(
                 author = "",
                 title = "Coinbase says Apple blocked its last app release on NFTs in Wallet ... - CryptoSaurus",
                 description = "Coinbase says Apple blocked its last app release on NFTs in Wallet ... - CryptoSaurus",
                 content = "We use cookies and data to Deliver and maintain Google services Track outages and protect against spam, fraud, and abuse Measure audience engagement and site statistics to unde… [+1131 chars]",
                 publishedAt = "2023-06-16T22:24:33Z",
-                source = Source(
+                source = NewsSource(
                     id = "", name = "bbc"
                 ),
                 url = "https://consent.google.com/ml?continue=https://news.google.com/rss/articles/CBMiaWh0dHBzOi8vY3J5cHRvc2F1cnVzLnRlY2gvY29pbmJhc2Utc2F5cy1hcHBsZS1ibG9ja2VkLWl0cy1sYXN0LWFwcC1yZWxlYXNlLW9uLW5mdHMtaW4td2FsbGV0LXJldXRlcnMtY29tL9IBAA?oc%3D5&gl=FR&hl=en-US&cm=2&pc=n&src=1",

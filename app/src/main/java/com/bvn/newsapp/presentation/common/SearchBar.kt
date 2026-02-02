@@ -1,6 +1,6 @@
 package com.bvn.newsapp.presentation.common
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.content.res.Configuration
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -36,26 +36,24 @@ fun SearchBar(
     text: String,
     readOnly: Boolean,
     onClick: (() -> Unit)? = null,
-    onValueChange: (String) -> Unit,
-    onSearch: () -> Unit
+    onValueChanged: (String) -> Unit,
+    onSearch: () -> Unit,
 ) {
-
     val interactionSource = remember {
         MutableInteractionSource()
     }
     val isClicked = interactionSource.collectIsPressedAsState().value
-    LaunchedEffect(key1 = isClicked, block = {
+    LaunchedEffect(key1 = isClicked) {
         if (isClicked) {
             onClick?.invoke()
         }
-    })
-
+    }
     Box(modifier = modifier) {
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .searchBarBorder(),
-            onValueChange = onValueChange,
+            onValueChange = onValueChanged,
             value = text,
             readOnly = readOnly,
             leadingIcon = {
@@ -101,17 +99,16 @@ fun Modifier.searchBarBorder() = composed {
             color = Color.Black,
             shape = MaterialTheme.shapes.medium
         )
-    } else
+    } else {
         this
+    }
 }
 
 @Preview(showBackground = true)
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun SearchBarPreview() {
+fun PreviewSearchBar() {
     NewsAppTheme {
-        SearchBar(text = "", readOnly = false, onValueChange = {}) {
-
-        }
+        SearchBar(text = "", readOnly = false, onValueChanged = {}) { }
     }
 }

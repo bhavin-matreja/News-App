@@ -5,44 +5,60 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.bvn.newsapp.domain.model.Article
+import androidx.paging.compose.LazyPagingItems
+import com.bvn.newsapp.domain.model.NewsArticle
 import com.bvn.newsapp.presentation.Dimens.MediumPadding1
-import com.bvn.newsapp.presentation.common.ArticlesList
+import com.bvn.newsapp.presentation.common.ArticleList
+import com.bvn.newsapp.presentation.common.EmptyScreen
 import com.bvn.newsapp.presentation.common.SearchBar
-import com.bvn.newsapp.presentation.navgraph.Route
 
 @Composable
 fun SearchScreen(
+    modifier: Modifier = Modifier,
     state: SearchState,
-    onEvent: (SearchEvent) -> Unit,
-    navigateToDetails: (Article) -> Unit,
+    articles: LazyPagingItems<NewsArticle>,
+    event: (SearchEvent) -> Unit,
+    navigateToDetails: (NewsArticle) -> Unit
 ) {
+    // Scaffold provides the correct 'innerPadding' that accounts for the Status Bar
+    Scaffold(
+        topBar = {
+            SearchBar(
+                modifier = Modifier.statusBarsPadding().padding(horizontal = MediumPadding1),
+                text = state.searchQuery,
+                readOnly = false,
+                onValueChanged = {
+                    event(SearchEvent.UpdateSearchQuery(it))
+                },
+                onSearch = {
+                    event(SearchEvent.SearchNews)
+                }
+            )
+        }
+    ) { innerPadding ->
 
-    Column(
-        modifier = Modifier
-            .padding(
-                top = MediumPadding1,
-                start = MediumPadding1,
-                end = MediumPadding1
-            )
-            .statusBarsPadding()
-    ) {
-        SearchBar(
-            text = state.searchQuery,
-            readOnly = false,
-            onValueChange = { onEvent(SearchEvent.UpdateSearchQuery(it)) },
-            onClick = {},
-            onSearch = { onEvent(SearchEvent.searchNews) })
-        Spacer(modifier = Modifier.height(MediumPadding1))
-        state.articles?.let {
-            val articles = it.collectAsLazyPagingItems()
-            ArticlesList(
-                articles = articles,
-                onClick = { navigateToDetails(it) }
-            )
+        Column(
+            modifier = modifier
+                .padding(innerPadding)
+                .padding(
+                    top = MediumPadding1,
+                    start = MediumPadding1,
+                    end = MediumPadding1
+                )
+        ) {
+
+            Spacer(modifier = Modifier.height(MediumPadding1))
+            if (state.searchQuery.isEmpty()) {
+                EmptyScreen()
+            } else {
+                ArticleList(
+                    articles = articles,
+                    onArticleClicked = { navigateToDetails(it) }
+                )
+            }
         }
     }
 }

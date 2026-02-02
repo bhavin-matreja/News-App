@@ -1,11 +1,9 @@
 package com.bvn.newsapp.presentation.details
 
-import com.bvn.newsapp.domain.model.Article
+import com.bvn.newsapp.domain.model.NewsArticle
 
-sealed class DetailsEvent {
-    object onBackClicked: DetailsEvent()
-    object onBookmarkClicked: DetailsEvent()
-    object onBrowsingClick: DetailsEvent()
-    data class upsertDeleteArticle(val article: Article) : DetailsEvent()
-    object removeSideEffect: DetailsEvent()
+sealed interface DetailsEvent {
+    object OnBackClicked: DetailsEvent
+    object onBrowsingClicked: DetailsEvent
+    data class UpsertDeleteArticle(val article: NewsArticle) : DetailsEvent
 }

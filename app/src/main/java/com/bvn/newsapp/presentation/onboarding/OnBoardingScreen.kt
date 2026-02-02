@@ -21,9 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.bvn.newsapp.presentation.Dimens.MediumPadding2
 import com.bvn.newsapp.presentation.Dimens.PageIndicatorWidth
-import com.bvn.newsapp.presentation.common.NewsButton
-import com.bvn.newsapp.presentation.common.NewsTextButton
 import com.bvn.newsapp.presentation.common.PageIndicator
+import com.bvn.newsapp.presentation.common.PrimaryButton
+import com.bvn.newsapp.presentation.common.TextButton
 import com.bvn.newsapp.presentation.onboarding.components.OnBoardingPage
 import kotlinx.coroutines.launch
 
@@ -74,7 +74,7 @@ fun OnBoardingScreen(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val coroutineScope = rememberCoroutineScope()
                 if (buttonState.value[0].isNotEmpty()) {
-                    NewsTextButton(
+                    TextButton(
                         text = buttonState.value[0],
                         onClick = {
                             coroutineScope.launch {
@@ -84,7 +84,7 @@ fun OnBoardingScreen(
                     )
                 }
 
-                NewsButton(
+                PrimaryButton(
                     text = buttonState.value[1],
                     onClick = {
                         coroutineScope.launch {
